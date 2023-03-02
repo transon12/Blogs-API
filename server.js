@@ -7,9 +7,13 @@ const { errorHandler } = require("./middlewares/errorHandler");
 
 // Import Models
 const User = require("./models/User");
-const Article = require("./models/Article");
-const Tag = require("./models/Tag");
+const Admin = require("./models/Admin");
+const Settings = require("./models/Setting");
+const Like = require("./models/Like");
 const Comment = require("./models/Comment");
+const Category = require("./models/Category");
+const Blogs = require("./models/Blogs");
+const Ratings = require("./models/Rating");
 
 dotenv.config({ path: "config.env" });
 
@@ -37,78 +41,53 @@ app.use((req, res, next) => {
 });
 
 // Route files
-const users = require("./routes/users");
-const profiles = require("./routes/profiles");
-const articles = require("./routes/articles");
-const comments = require("./routes/comments");
-const tags = require("./routes/tags");
+// const users = require("./routes/users");
+// const profiles = require("./routes/profiles");
+// const articles = require("./routes/articles");
+// const comments = require("./routes/comments");
+// const tags = require("./routes/tags");
 
 // Mount routers
-app.use(users);
-app.use(profiles);
-app.use(articles);
-app.use(comments);
-app.use(tags);
+// app.use(users);
+// app.use(profiles);
+// app.use(articles);
+// app.use(comments);
+// app.use(tags);
 
 const PORT = process.env.PORT || 8080;
 
 app.use(errorHandler);
 
 // Relations
-User.belongsToMany(User, {
-  as: "followers",
-  through: "Followers",
-  foreignKey: "userId",
-  timestamps: false,
-});
-User.belongsToMany(User, {
-  as: "following",
-  through: "Followers",
-  foreignKey: "followerId",
-  timestamps: false,
-});
+//user relation blogs
+User.hasMany(Blogs);
+Blogs.belongsTo(User);
 
-User.hasMany(Article, {
-  foreignKey: "authorId",
-  onDelete: "CASCADE",
-});
-Article.belongsTo(User, { as: "author", foreignKey: "authorId" });
+//admin relation blog
+Admin.hasMany(Blogs);
+Blogs.belongsTo(Admin);
 
-User.hasMany(Comment, {
-  foreignKey: "authorId",
-  onDelete: "CASCADE",
-});
-Comment.belongsTo(User, { as: "author", foreignKey: "authorId" });
+//blog relation coment
+Blogs.hasMany(Comment);
+Comment.belongsTo(Blogs);
 
-Article.hasMany(Comment, {
-  foreignKey: "articleId",
-  onDelete: "CASCADE",
-});
-Comment.belongsTo(Article, { foreignKey: "articleId" });
+//category relation blogs
+Category.hasMany(Blogs);
+Blogs.belongsTo(Category);
 
-User.belongsToMany(Article, {
-  as: "favorites",
-  through: "Favorites",
-  timestamps: false,
-});
-Article.belongsToMany(User, {
-  through: "Favorites",
-  foreignKey: "articleId",
-  timestamps: false,
-});
+//user relation rating
+User.hasMany(Comment);
+User.hasMany(Ratings);
 
-Article.belongsToMany(Tag, {
-  through: "TagLists",
-  as: "tagLists",
-  foreignKey: "articleId",
-  timestamps: false,
-  onDelete: "CASCADE",
-});
-Tag.belongsToMany(Article, {
-  through: "ArticleTags",
-  uniqueKey: false,
-  timestamps: false,
-});
+//comment realtion rating
+
+Comment.hasMany(Ratings);
+
+//user relation like
+User.hasMany(Like);
+
+//like relation blogs
+Like.belongsTo(Blogs);
 
 const sync = async () => await sequelize.sync({ force: true });
 sync().then(() => {

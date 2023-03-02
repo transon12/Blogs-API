@@ -1,7 +1,7 @@
 const { where } = require("sequelize");
 const asyncHandler = require("../middlewares/asyncHandler");
-const Article = require("../models/Article");
-const Tag = require("../models/Tag");
+const Article = require("../models/Setting");
+const Tag = require("../models/Like");
 const User = require("../models/User");
 const ErrorResponse = require("../util/errorResponse");
 const slugify = require("slugify");

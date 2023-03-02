@@ -1,14 +1,17 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../util/database");
 
-const Comment = sequelize.define("Comment", {
-  content: {
+const Settings = sequelize.define("settings", {
+  key: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  blog_id: {
+  value: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  position: {
+    type: DataTypes.STRING,
   },
   is_active: {
     type: DataTypes.BOOLEAN,
@@ -16,4 +19,4 @@ const Comment = sequelize.define("Comment", {
   },
 });
 
-module.exports = Comment;
+module.exports = Settings;

@@ -1,12 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../util/database");
 
-const Comment = sequelize.define("Comment", {
-  content: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  blog_id: {
+const Category = sequelize.define("catyegories", {
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -14,6 +10,14 @@ const Comment = sequelize.define("Comment", {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-module.exports = Comment;
+module.exports = Category;
