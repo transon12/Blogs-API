@@ -19,6 +19,7 @@ dotenv.config({ path: "config.env" });
 
 const app = express();
 
+
 // Body parser
 app.use(express.json());
 
@@ -41,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 // Route files
-// const users = require("./routes/users");
+const users = require("./routes/users");
 // const profiles = require("./routes/profiles");
 // const articles = require("./routes/articles");
 // const comments = require("./routes/comments");
@@ -87,21 +88,10 @@ Comment.hasMany(Ratings);
 User.hasMany(Like);
 
 //like relation blogs
+Blogs.hasMany(Like)
 Like.belongsTo(Blogs);
 
-const sync = async () => await sequelize.sync({ force: true });
-sync().then(() => {
-  User.create({
-    email: "test@test.com",
-    password: "123456",
-    username: "neo",
-  });
-  User.create({
-    email: "test2@test.com",
-    password: "123456",
-    username: "celeb_neo",
-  });
-});
+sequelize.sync({force : true})
 
 const server = app.listen(
   PORT,

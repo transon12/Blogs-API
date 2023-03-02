@@ -11,9 +11,9 @@ module.exports.createUser = asyncHandler(async (req, res, next) => {
   fieldValidation(username, next);
 
   const user = await User.create({
+    username: username,
     email: email,
     password: password,
-    username: username,
   });
 
   if (user.dataValues.password) {
