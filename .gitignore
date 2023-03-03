@@ -6,7 +6,8 @@ config.env
 # dependencies
 /node_modules
 /dist
-
+/.env
+/package.json
 # IDEs and editors
 /.idea
 .project
