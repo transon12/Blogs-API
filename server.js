@@ -17,10 +17,8 @@ const Blogs = require("./models/Blogs");
 const Ratings = require("./models/Rating");
 
 dotenv.config({ path: "config.env" });
-console.log("server:", process.env.NODE_ENV);
-
 const app = express();
-
+console.log(process.env.HOSTNAME);
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -56,7 +54,7 @@ const users = require("./routes/users");
 // const tags = require("./routes/tags");
 
 // Mount routers
-// app.use(users);
+app.use(users);
 // app.use(profiles);
 // app.use(articles);
 // app.use(comments);
