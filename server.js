@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
 const { errorHandler } = require("./middlewares/errorHandler");
+const cors = require("cors");
 
 // Import Models
 const User = require("./models/User");
@@ -16,16 +17,22 @@ const Blogs = require("./models/Blogs");
 const Ratings = require("./models/Rating");
 
 dotenv.config({ path: "config.env" });
+console.log("server:", process.env.NODE_ENV);
 
 const app = express();
 
-
 // Body parser
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+console.log("server:", process.env.NODE_ENV);
 
 // CORS
 app.use((req, res, next) => {
@@ -88,10 +95,10 @@ Comment.hasMany(Ratings);
 User.hasMany(Like);
 
 //like relation blogs
-Blogs.hasMany(Like)
+Blogs.hasMany(Like);
 Like.belongsTo(Blogs);
 
-sequelize.sync({force : true})
+sequelize.sync({ force: true });
 
 const server = app.listen(
   PORT,
