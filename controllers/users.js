@@ -11,7 +11,7 @@ module.exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 //signup user
 module.exports.createUser = asyncHandler(async (req, res, next) => {
-  const { email, password, username, role } = req.body;
+  const { email, password, username, role, token } = req.body;
 
   fieldValidation(email, next);
   fieldValidation(password, next);
@@ -21,13 +21,12 @@ module.exports.createUser = asyncHandler(async (req, res, next) => {
     username: username,
     email: email,
     password: password,
+    token: (user.dataValues.token = await sign(user)),
   });
 
   if (user.dataValues.password) {
     delete user.dataValues.password;
   }
-
-  // user.dataValues.token = await sign(user);
 
   user.dataValues.bio = null;
   user.dataValues.image = null;
