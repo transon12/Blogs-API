@@ -3,6 +3,7 @@ const sequelize = require("./util/database");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const bodyParser = require("body-parser");
 const { errorHandler } = require("./middlewares/errorHandler");
 const cors = require("cors");
 
@@ -20,6 +21,7 @@ dotenv.config({ path: "config.env" });
 const app = express();
 console.log(process.env.HOSTNAME);
 // Body parser
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

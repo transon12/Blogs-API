@@ -9,7 +9,7 @@ const {
   signUpEmail,
 } = require("../controllers/users");
 const { protect } = require("../middlewares/auth");
-// router.get("/users", getAllUsers);
+router.get("/users", getAllUsers);
 router.post("/users/signup", createUser);
 router.post("/users/signup-with-email", signUpEmail);
 router.post("/users/login", loginUser);

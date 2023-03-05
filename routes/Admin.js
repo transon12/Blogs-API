@@ -1,11 +1,15 @@
-const { protect } = require("../middlewares/auth");
+const express = require("express");
+const router = express.Router();
 const { createUserAdmin, loginAdmin } = require("../controllers/admin");
+const { protect } = require("../middlewares/auth");
+// router.get("/users", getAllUsers);
+router.get("/admin/signup", (req, res) => {
+  res.send("hehehe");
+  console.log("hehehe");
+});
 
-module.exports = (app) => {
-  const router = require("express").Router();
+router.post("/admin/login", loginAdmin);
 
-  router
-    .post("/admin/signup", createUserAdmin)
-    .post("/admin/login", loginAdmin);
-  app.use(router);
-};
+router.route("/user").get(protect, getCurrentUser).put(protect, updateUser);
+
+module.exports = router;

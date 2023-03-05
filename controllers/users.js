@@ -11,27 +11,30 @@ module.exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 //signup user
 module.exports.createUser = asyncHandler(async (req, res, next) => {
-  const { email, password, username, role, token } = req.body;
+  try {
+    const { email, password, username, role, token } = req.body;
 
-  fieldValidation(email, next);
-  fieldValidation(password, next);
-  fieldValidation(username, next);
+    fieldValidation(email, next);
+    fieldValidation(password, next);
+    fieldValidation(username, next);
+    const user = await User.create({
+      username: username,
+      email: email,
+      password: password,
+      // token: (user.dataValues.token = await sign(user)),
+    });
 
-  const user = await User.create({
-    username: username,
-    email: email,
-    password: password,
-    token: (user.dataValues.token = await sign(user)),
-  });
+    if (user.dataValues.password) {
+      delete user.dataValues.password;
+    }
 
-  if (user.dataValues.password) {
-    delete user.dataValues.password;
+    user.dataValues.bio = null;
+    user.dataValues.image = null;
+
+    res.status(200).json({ msg: "User created succesfully" });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
   }
-
-  user.dataValues.bio = null;
-  user.dataValues.image = null;
-
-  res.status(201).json({ user });
 });
 //signup email
 module.exports.signUpEmail = asyncHandler(async (req, res) => {
@@ -58,35 +61,40 @@ module.exports.signUpEmail = asyncHandler(async (req, res) => {
 //
 //
 module.exports.loginUser = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body.user;
+  try {
+    const { email, password } = req.body.user;
 
-  fieldValidation(email, next);
-  fieldValidation(password, next);
+    fieldValidation(email, next);
+    fieldValidation(password, next);
 
-  const user = await User.findOne({
-    where: {
-      email: email,
-    },
-  });
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
 
-  if (!user) {
-    return next(new ErrorResponse(`User not found`, 404));
+    if (!user) {
+      return next(new ErrorResponse(`User not found`, 404));
+    }
+
+    const isMatch = user.matchPassword(password);
+
+    if (!isMatch) {
+      return next(new ErrorResponse("Wrong password", 401));
+    }
+
+    delete user.dataValues.password;
+
+    user.dataValues.token = await sign(user);
+
+    user.dataValues.bio = null;
+    user.dataValues.image = null;
+
+    res.status(200).json({ user });
+    // res.redirect("/users");
+  } catch (err) {
+    res.status(400).json({ msg: "err" });
   }
-
-  const isMatch = user.matchPassword(password);
-
-  if (!isMatch) {
-    return next(new ErrorResponse("Wrong password", 401));
-  }
-
-  delete user.dataValues.password;
-
-  user.dataValues.token = await sign(user);
-
-  user.dataValues.bio = null;
-  user.dataValues.image = null;
-
-  res.status(200).json({ user });
 });
 
 module.exports.getCurrentUser = asyncHandler(async (req, res, next) => {

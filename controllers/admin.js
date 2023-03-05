@@ -2,29 +2,30 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const Admin = require("../models/Admin");
 
 module.exports.createUserAdmin = asyncHandler(async (req, res, next) => {
-  const { email, password, username, role, token } = req.body;
+  // const { email, password, username, role, token } = req.body;
 
-  fieldValidation(email, next);
-  fieldValidation(password, next);
-  fieldValidation(username, next);
+  // fieldValidation(email, next);
+  // fieldValidation(password, next);
+  // fieldValidation(username, next);
 
-  const admin = await Admin.create({
-    username: username,
-    email: email,
-    password: password,
-    token: (admin.dataValues.token = await sign(admin)),
-  });
+  // const admin = await Admin.create({
+  //   username: username,
+  //   email: email,
+  //   password: password,
+  //   token: (admin.dataValues.token = await sign(admin)),
+  // });
 
-  if (admin.dataValues.password) {
-    delete admin.dataValues.password;
-  }
+  // if (admin.dataValues.password) {
+  //   delete admin.dataValues.password;
+  // }
 
-  // user.dataValues.token = await sign(user);
+  // // user.dataValues.token = await sign(user);
 
-  admin.dataValues.bio = null;
-  admin.dataValues.image = null;
+  // admin.dataValues.bio = null;
+  // admin.dataValues.image = null;
 
-  res.status(201).json({ user });
+  // res.status(201).json({ admin });
+  res.send("hello");
 });
 module.exports.loginAdmin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body.admin;
