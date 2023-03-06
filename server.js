@@ -3,6 +3,7 @@ const sequelize = require("./util/database");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const bodyParser = require("body-parser");
 const { errorHandler } = require("./middlewares/errorHandler");
 const cors = require("cors");
 
@@ -17,11 +18,10 @@ const Blogs = require("./models/Blogs");
 const Ratings = require("./models/Rating");
 
 dotenv.config({ path: "config.env" });
-console.log("server:", process.env.NODE_ENV);
-
 const app = express();
-
+console.log(process.env.HOSTNAME);
 // Body parser
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -56,7 +56,7 @@ const users = require("./routes/users");
 // const tags = require("./routes/tags");
 
 // Mount routers
-// app.use(users);
+app.use(users);
 // app.use(profiles);
 // app.use(articles);
 // app.use(comments);

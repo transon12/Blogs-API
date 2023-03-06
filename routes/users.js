@@ -5,10 +5,13 @@ const {
   loginUser,
   getCurrentUser,
   updateUser,
+  getAllUsers,
+  signUpEmail,
 } = require("../controllers/users");
 const { protect } = require("../middlewares/auth");
-
-router.post("/users", createUser);
+router.get("/users", getAllUsers);
+router.post("/users/signup", createUser);
+router.post("/users/signup-with-email", signUpEmail);
 router.post("/users/login", loginUser);
 
 router.route("/user").get(protect, getCurrentUser).put(protect, updateUser);

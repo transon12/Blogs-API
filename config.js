@@ -1,0 +1,13 @@
+NODE_ENV = "development";
+PORT = 8000;
+JWT_SECRET = "NOTAPI";
+HOST = "127.0.0.1";
+DIALECT = "mysql";
+DATABASE = "csdl_blogs";
+HOSTNAME = "root";
+PASSWORD = "12345678";
+JWT_SERCERT = Math.floor(Math.random() * 100000);
+GMAIL_USER = "your_gmail_address";
+GMAIL_PASS = "your_pass_address";
+MAILHOST = "smtp.gmail.com";
+MAILPORT = 587;
