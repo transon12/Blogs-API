@@ -2,75 +2,44 @@ const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../util/database");
 const bcrypt = require("bcryptjs");
 
-/**
- * "email": "jake@jake.jake",
-    "token": "jwt.token.here",
-    "username": "jake",
-    "bio": "I work at statefarm",
-    "image": null
- */
-
-const User = sequelize.define(
-  "User",
+const Admin = sequelize.define(
+  "Admin",
   {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-
     fullname: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
-    phone: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    date_of_birth: {
+    google_id: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
     avatar: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     is_active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM("user"),
-      defaultValue: "user",
-    },
-    google_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    facebook_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    auth_email: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      type: DataTypes.ENUM("admin"),
+      defaultValue: "admin",
     },
     token: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
   },
   { timestamps: false }
@@ -79,15 +48,13 @@ const User = sequelize.define(
 Model.prototype.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
 const DEFAULT_SALT_ROUNDS = 10;
 
-User.addHook("beforeCreate", async (user) => {
+Admin.addHook("beforeCreate", async (user) => {
   const encryptedPassword = await bcrypt.hash(
     user.password,
     DEFAULT_SALT_ROUNDS
   );
   user.password = encryptedPassword;
 });
-
-module.exports = User;
+module.exports = Admin;

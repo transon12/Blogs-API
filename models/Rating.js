@@ -1,8 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../util/database");
 
-const Comment = sequelize.define("Comment", {
-  content: {
+const Ratings = sequelize.define("ratings", {
+  user_id: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -10,10 +10,9 @@ const Comment = sequelize.define("Comment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
+  star_value: {
+    type: DataTypes.TINYINT,
+    allowNull: true,
   },
 });
-
-module.exports = Comment;
+module.exports = Ratings;
