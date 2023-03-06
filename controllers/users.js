@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 const { sign, verify } = require("../util/jwt");
 const dotenv = require("dotenv");
 const sendMail = require("../util/mailer");
+const { Op } = require("sequelize");
 
 module.exports.getAllUsers = asyncHandler(async (req, res, next) => {
   res.send("hello");
@@ -40,49 +41,52 @@ module.exports.createUser = asyncHandler(async (req, res, next) => {
 //signup email
 module.exports.signUpEmail = asyncHandler(async (req, res, next) => {
   // const password = "123123";
-  const { email, password, token } = req.body;
-  console.log(email);
-  fieldValidation(email, next);
-  fieldValidation(password, next);
-  // console.log(fieldValidation(email, next));
-  console.log("email:", email);
-  const user = await User.create({
-    email: email,
-    password: password,
-  });
-  // console.log(user);
-  user.dataValues.token = await sign(user);
-  console.log(user.dataValues.token);
-  //tao ma xac thuc
-  const code = Math.floor(Math.random() * 1000000);
+  try {
+    const { email, password, token } = req.body;
+    console.log(email);
+    fieldValidation(email, next);
+    fieldValidation(password, next);
+    // console.log(fieldValidation(email, next));
+    console.log("email:", email);
+    const user = await User.create({
+      email: email,
+      password: password,
+    });
+    // console.log(user);
+    user.dataValues.token = await sign(user);
+    console.log(user.dataValues.token);
+    //tao ma xac thuc
+    const code = Math.floor(Math.random() * 1000000);
 
-  // //gui email
-  const subject = "Xác thực đăng ký tài khoản tại đây:";
-  const text = ` http://localhost:8080?token=${user.dataValues.token}}`;
+    // //gui email
+    const subject = "Xác thực đăng ký tài khoản tại đây:";
+    const text = ` http://localhost:8080?token=${user.dataValues.token}}`;
 
-  res.status(200).json({ msg: "Create successfully" });
-  return await sendMail.sendMail(user.email, subject, text);
-  // if (sent) return code;
-  console.log("user:", user);
+    res.status(200).json({ msg: "Create successfully" });
+    return await sendMail.sendMail(user.email, subject, text);
+  } catch (err) {
+    res.status(400).json({ msg: "Email already exist." });
+  }
 });
+
 //
 //
 //
-//
+//login
 module.exports.loginUser = asyncHandler(async (req, res, next) => {
   // try {
-  const { username, password } = req.body;
-  console.log(username);
-  fieldValidation(username, next);
+  const { email, password } = req.body;
+  console.log(email);
+  fieldValidation(email, next);
   fieldValidation(password, next);
 
   const user = await User.findOne({
     where: {
-      username: username,
+      email: email,
     },
   });
 
-  if (!user) {
+  if (!email) {
     return next(new ErrorResponse(`User not found`, 404));
   }
 
@@ -107,8 +111,24 @@ module.exports.loginUser = asyncHandler(async (req, res, next) => {
   // }
 });
 
+module.exports.loginFacebookAndGmail = asyncHandler(async (req, res, next) => {
+  const { social_id, type } = req.body;
+
+  const user = await User.findOne({
+    where: {
+      [Op.or]: [{ google_id: social_id }, { facebook_id: social_id }],
+    },
+  });
+  console.log("id", user);
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+  user.dataValues.token = await (await sign(user)).split("")[1];
+  res.status(200).json({ msg: "Checking successfully", user });
+});
 module.exports.getCurrentUser = asyncHandler(async (req, res, next) => {
   const { loggedUser } = req;
+  console.log(loggedUser);
   const user = await User.findByPk(loggedUser.id);
 
   if (!user) {
