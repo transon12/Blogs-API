@@ -98,7 +98,7 @@ User.hasMany(Like);
 Blogs.hasMany(Like);
 Like.belongsTo(Blogs);
 
-sequelize.sync({ force: true });
+sequelize.sync();
 
 const server = app.listen(
   PORT,
