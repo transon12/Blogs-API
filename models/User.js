@@ -71,7 +71,7 @@ const User = sequelize.define(
       allowNull: true,
     },
     auth_email: {
-      type: DataTypes.STRING,
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
     token: {
