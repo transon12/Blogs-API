@@ -50,13 +50,14 @@ app.use((req, res, next) => {
 
 // Route files
 const users = require("./routes/users");
-// const profiles = require("./routes/profiles");
+const getBlogs = require("./routes/user.getblogs");
 // const articles = require("./routes/articles");
 // const comments = require("./routes/comments");
 // const tags = require("./routes/tags");
 
 // Mount routers
 app.use(users);
+app.use(getBlogs);
 // app.use(profiles);
 // app.use(articles);
 // app.use(comments);
