@@ -50,6 +50,7 @@ app.use((req, res, next) => {
 });
 
 // Route files
+const admin = require("./routes/Admin");
 const users = require("./routes/users");
 // const profiles = require("./routes/profiles");
 const articles = require("./routes/articles");
@@ -57,12 +58,10 @@ const articles = require("./routes/articles");
 // const tags = require("./routes/tags");
 
 // Mount routers
-app.get("/abc", (req, res) => {
-  res.send("helo");
-});
+app.use(admin);
 app.use(users);
 // app.use(profiles);
-app.use("/", articles);
+// app.use("/", articles);
 // app.use(comments);
 // app.use(tags);
 

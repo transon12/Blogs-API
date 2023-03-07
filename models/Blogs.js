@@ -63,7 +63,7 @@ const Blogs = sequelize.define(
       allowNull: true,
     },
   },
-  { timestamps: false }
+  { timestamps: true }
 );
 // Blogs.beforeValidate((blogs) => {
 //   blogs.slugs = slugify(blogs.slugs, { lower: true });

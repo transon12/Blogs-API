@@ -23,7 +23,7 @@ module.exports.createArticle = async (req, res, next) => {
     const { title, description, content } = req.body;
 
     const article = await Article.create({ ...req.body });
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       message: "successfully created",
     });
@@ -42,9 +42,9 @@ const fieldValidation = (field, next) => {
 module.exports.getAllArticle = async (req, res, next) => {
   try {
     const getAll = await Article.findAll();
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
-      message: "successfully created",
+      message: "successfully get All articles",
       data: getAll,
     });
   } catch (err) {
@@ -55,9 +55,9 @@ module.exports.getAllArticle = async (req, res, next) => {
 module.exports.getOneArticle = async (req, res, next) => {
   try {
     const getOne = await Article.findOne();
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
-      message: "successfully created",
+      message: "successfully get One articles",
       data: getOne,
     });
   } catch (err) {
@@ -78,9 +78,9 @@ module.exports.updateArticle = async (req, res, next) => {
       updateArticle.content = req.body.content;
       await updateArticle.save();
     }
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
-      message: "successfully created",
+      message: "successfully update",
       data: updateArticle,
     });
   } catch (err) {
@@ -98,12 +98,35 @@ module.exports.deleteArticle = async (req, res, next) => {
     if (deleteArticle) {
       await deleteArticle.destroy();
     }
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
-      message: "successfully created",
+      message: "successfully deleted",
       data: deleteArticle,
     });
   } catch (err) {
     console.log(err);
+  }
+};
+
+module.exports.getRecord = async (req, res, next) => {
+  try {
+    const limit = 10;
+    const page = req.params.page || 1;
+    const getRecord = await Article.findAll({
+      offset: (page - 1) * limit,
+      limit: limit,
+      order: [["createdAt", "DESC"]],
+    });
+    res.status(200).json({
+      status: 200,
+      message: "successfully",
+      data: getRecord,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: "error getting record",
+      data: err,
+    });
   }
 };
