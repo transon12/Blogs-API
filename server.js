@@ -86,14 +86,19 @@ Blogs.belongsTo(Category);
 
 //user relation rating
 User.hasMany(Comment);
+Comment.belongsTo(User);
+//
 User.hasMany(Ratings);
+Ratings.belongsTo(User);
 
 //comment realtion rating
 
 Comment.hasMany(Ratings);
+Ratings.belongsTo(Comment);
 
 //user relation like
 User.hasMany(Like);
+Like.belongsTo(User);
 
 //like relation blogs
 Blogs.hasMany(Like);

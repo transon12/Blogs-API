@@ -17,12 +17,7 @@ module.exports.getNewBlogs = asyncHandler(async (req, res, next) => {
         },
         {
           model: Comment,
-          include: [
-            {
-              model: User,
-              attributes: ["user_id"],
-            },
-          ],
+          include: [{ model: User, attributes: ["username"] }],
         },
       ],
       order: [["user_id", "DESC"]],
@@ -49,8 +44,37 @@ module.exports.getLikeOrDisLike = asyncHandler(async (req, res, next) => {
         },
       ],
     });
+    console.log("get", getLikeDisLike);
     res.status(200).json({ msg: "Get successfully", data: getLikeDisLike });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "Cannot get user like or dislike blogLists" });
+  }
+});
+module.exports.listComments = asyncHandler(async (req, res, next) => {
+  try {
+    const getListComments = await Comment.findAll({
+      include: [
+        {
+          model: Blogs,
+          attributes: ["id", "title", "content"],
+        },
+        {
+          model: User,
+          attributes: ["username"],
+        },
+      ],
+    });
+    (await getListComments).forEach((comment) => {
+      console.log("list", comment);
+    });
+    res.status(200).json({
+      msg: "Get comment successfully",
+      listComment: getListComments,
+      // listitem: list,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Cannot get user list comments" });
   }
 });
