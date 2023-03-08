@@ -20,7 +20,7 @@ module.exports.getNewBlogs = asyncHandler(async (req, res, next) => {
           include: [
             {
               model: User,
-              attributes: ["id"],
+              attributes: ["user_id"],
             },
           ],
         },
@@ -40,10 +40,12 @@ module.exports.getLikeOrDisLike = asyncHandler(async (req, res, next) => {
         {
           model: Likes,
           attributes: ["status"],
-        },
-        {
-          model: User,
-          attributes: ["username"],
+          include: [
+            {
+              model: User,
+              attributes: ["username"],
+            },
+          ],
         },
       ],
     });
