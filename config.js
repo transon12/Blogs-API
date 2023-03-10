@@ -11,4 +11,3 @@ GMAIL_USER = "your_gmail_address";
 GMAIL_PASS = "your_pass_address";
 MAILHOST = "smtp.gmail.com";
 MAILPORT = 587;
-timezone: "+07:00";

@@ -3,19 +3,29 @@ const Article = require("../models/Blogs");
 const Tag = require("../models/Like");
 const User = require("../models/User");
 const ErrorResponse = require("../util/errorResponse");
+const validate = require("../middlewares/validations.sql");
 
 module.exports.createArticle = async (req, res, next) => {
   try {
-    fieldValidation(req.body.title, next);
-    fieldValidation(req.body.description, next);
-    fieldValidation(req.body.content, next);
+    // fieldValidation(req.body.title, next);
+    // fieldValidation(req.body.description, next);
+    // fieldValidation(req.body.content, next);
+    let { title } = req.body;
+    let maxLengthErr = validate.maxLength(title, 255);
+    let minLengthErr = validate.minLength(title, 0);
 
-    const article = await Article.create({ ...req.body });
-    res.status(200).json({
-      status: 200,
-      message: "successfully created",
-    });
-    console.log(article);
+    if (maxLengthErr) {
+      res.status(500).json(maxLengthErr);
+    } else if (minLengthErr) {
+      res.status(500).json(minLengthErr);
+    } else {
+      const article = await Article.create({ ...req.body });
+      res.status(200).json({
+        status: 200,
+        message: "successfully created",
+      });
+      console.log(article);
+    }
   } catch (err) {
     res.status(500).json({ error: err.toString() });
   }
