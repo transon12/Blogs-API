@@ -4,23 +4,11 @@ const Tag = require("../models/Like");
 const User = require("../models/User");
 const ErrorResponse = require("../util/errorResponse");
 
-// const includeOptions = [
-//   {
-//     model: Tag,
-//     as: "tagLists",
-//     attributes: ["name"],
-//     through: { attributes: [] },
-//   },
-//   { model: User, as: "author", attributes: { exclude: ["email", "password"] } },
-// ];
-
 module.exports.createArticle = async (req, res, next) => {
   try {
     fieldValidation(req.body.title, next);
     fieldValidation(req.body.description, next);
     fieldValidation(req.body.content, next);
-
-    const { title, description, content } = req.body;
 
     const article = await Article.create({ ...req.body });
     res.status(200).json({
@@ -29,7 +17,7 @@ module.exports.createArticle = async (req, res, next) => {
     });
     console.log(article);
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ error: err.toString() });
   }
 };
 
@@ -111,7 +99,7 @@ module.exports.deleteArticle = async (req, res, next) => {
 module.exports.getRecord = async (req, res, next) => {
   try {
     const limit = 10;
-    const page = req.params.page || 1;
+    const page = req.query.page || 1;
     const getRecord = await Article.findAll({
       offset: (page - 1) * limit,
       limit: limit,

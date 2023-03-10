@@ -53,8 +53,8 @@ app.use((req, res, next) => {
 const admin = require("./routes/Admin");
 const users = require("./routes/users");
 // const profiles = require("./routes/profiles");
-const articles = require("./routes/articles");
-// const comments = require("./routes/comments");
+// const articles = require("./routes/articles");
+const comments = require("./routes/comments");
 // const tags = require("./routes/tags");
 
 // Mount routers
@@ -62,7 +62,7 @@ app.use(admin);
 app.use(users);
 // app.use(profiles);
 // app.use("/", articles);
-// app.use(comments);
+app.use(comments);
 // app.use(tags);
 
 const PORT = 8000;

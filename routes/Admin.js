@@ -3,6 +3,7 @@ const router = express.Router();
 const { createUserAdmin, loginAdmin } = require("../controllers/admin");
 const { protect } = require("../middlewares/auth");
 const service = require("../services/admin.blog");
+const category = require("../services/category");
 
 // router.get("/users", getAllUsers);
 
@@ -16,5 +17,5 @@ router.get("/admin/:id", service.getOneArticle);
 router.put("/admin/:id", service.updateArticle);
 router.delete("/admin/:id", service.deleteArticle);
 router.get("/admin", service.getRecord);
-
+router.post("/admin/category", category.createcatyegories);
 module.exports = router;
