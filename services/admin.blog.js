@@ -52,7 +52,11 @@ module.exports.getAllArticle = async (req, res, next) => {
 
 module.exports.getOneArticle = async (req, res, next) => {
   try {
-    const getOne = await Article.findOne();
+    const getOne = await Article.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
     res.status(200).json({
       status: 200,
       message: "successfully get One articles",
