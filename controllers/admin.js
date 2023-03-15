@@ -149,3 +149,29 @@ module.exports.deleteUserAdmin = async (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.protect = async (req, res, next) => {
+  try {
+    const { headers } = req;
+    if (!headers.authorization) return next();
+
+    const token = headers.authorization.split(" ")[1];
+    if (!token) throw new SyntaxError("Token missing or malformed");
+
+    const userVerified = await verify(token);
+    if (!userVerified) throw new Error("Invalid Token");
+
+    req.loggedUser = await Admin.findOne({
+      attributes: { exclude: ["username", "password"] },
+      where: { username: userVerified.username },
+    });
+
+    if (!req.loggedUser) next(new NotFoundError("User"));
+
+    req.loggedUser.dataValues.token = token;
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

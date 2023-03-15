@@ -24,4 +24,6 @@ router.get("/admin/users", usersAdmin.getAllAdmin);
 router.put("/admin/users/:id", usersAdmin.updateUserAdmin);
 router.delete("/admin/users/:id", usersAdmin.deleteUserAdmin);
 
+router.post("/admin/signin", usersAdmin.protect);
+
 module.exports = router;
