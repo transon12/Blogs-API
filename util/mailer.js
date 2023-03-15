@@ -29,10 +29,11 @@ module.exports.sendMail = asyncHandler(async (to, subject, text) => {
   console.log(to);
   const mailOptions = {
     from: GMAIL_USER,
-    to: "sontx@rikkeisoft.com",
-    subject: "sending success",
-    text: "test",
+    to: to,
+    subject: subject,
+    text: text,
   };
+  console.log("mail option", mailOptions);
   const load = await transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       console.log(err);

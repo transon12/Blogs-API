@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 // Route files
 const admin = require("./routes/Admin");
 const users = require("./routes/users");
-// const profiles = require("./routes/profiles");
+const getBlogs = require("./routes/user.getblogs");
 // const articles = require("./routes/articles");
 const comments = require("./routes/comments");
 // const tags = require("./routes/tags");
@@ -60,6 +60,7 @@ const comments = require("./routes/comments");
 // Mount routers
 app.use(admin);
 app.use(users);
+app.use(getBlogs);
 // app.use(profiles);
 // app.use("/", articles);
 app.use(comments);
@@ -88,14 +89,19 @@ Blogs.belongsTo(Category);
 
 //user relation rating
 User.hasMany(Comment);
+Comment.belongsTo(User);
+//
 User.hasMany(Ratings);
+Ratings.belongsTo(User);
 
 //comment realtion rating
 
 Comment.hasMany(Ratings);
+Ratings.belongsTo(Comment);
 
 //user relation like
 User.hasMany(Like);
+Like.belongsTo(User);
 
 //like relation blogs
 Blogs.hasMany(Like);
