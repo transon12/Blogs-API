@@ -1,15 +1,13 @@
 const comments = require("../models/Comment");
 const users = require("../models/User");
 const { get } = require("../routes/Admin");
+const CommentService = require("./commentservice");
 
 module.exports.createComment = async (req, res, next) => {
   try {
-    const comment = await comments.create({ ...req.body });
-    res.status(200).json({
-      status: 200,
-      message: "Comment created",
-      data: comment,
-    });
+    let comment = new CommentService(req.body);
+    let a = await comment.createdComment();
+    console.log(a);
   } catch (err) {
     res.status(500).json({ error: err });
     console.log(err);
@@ -18,17 +16,20 @@ module.exports.createComment = async (req, res, next) => {
 
 module.exports.getComment = async (req, res, next) => {
   try {
-    const getComment = await comments.findAll({
-      where: { BlogId: req.params.blogid },
-      include: {
-        model: users,
-        attributes: ["username", "avatar"],
-      },
-    });
+    let comment = new CommentService(req.body);
+    let a = await comment.getAllComment();
+
+    // const getComment = await comments.findAll({
+    //   where: { BlogId: req.params.blogid },
+    //   include: {
+    //     model: users,
+    //     attributes: ["username", "avatar"],
+    //   },
+    // });
     res.status(200).json({
       status: 200,
       message: "successfully",
-      data: getComment,
+      data: a,
     });
     // console.log(getComment);
   } catch (err) {
