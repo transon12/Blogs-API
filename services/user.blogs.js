@@ -80,7 +80,7 @@ module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
   try {
     const getIndividual = await Blogs.findAll({
       where: {
-        UserId: "38",
+        UserId: "39",
       },
       include: [
         {

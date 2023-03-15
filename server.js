@@ -19,8 +19,9 @@ const Ratings = require("./models/Rating");
 
 dotenv.config({ path: "config.env" });
 const app = express();
-console.log(process.env.HOSTNAME);
+// console.log(process.env.HOSTNAME);
 // Body parser
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +33,7 @@ app.use(
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-console.log("server:", process.env.NODE_ENV);
+// console.log("server:", process.env.NODE_ENV);
 
 // CORS
 app.use((req, res, next) => {
@@ -49,21 +50,23 @@ app.use((req, res, next) => {
 });
 
 // Route files
+const admin = require("./routes/Admin");
 const users = require("./routes/users");
 const getBlogs = require("./routes/user.getblogs");
 // const articles = require("./routes/articles");
-// const comments = require("./routes/comments");
+const comments = require("./routes/comments");
 // const tags = require("./routes/tags");
 
 // Mount routers
+app.use(admin);
 app.use(users);
 app.use(getBlogs);
 // app.use(profiles);
-// app.use(articles);
-// app.use(comments);
+// app.use("/", articles);
+app.use(comments);
 // app.use(tags);
 
-const PORT = process.env.PORT || 8080;
+const PORT = 8000;
 
 app.use(errorHandler);
 
