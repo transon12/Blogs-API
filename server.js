@@ -66,7 +66,7 @@ app.use(getBlogs);
 app.use(comments);
 // app.use(tags);
 
-const PORT = 8000;
+const PORT = 8080;
 
 app.use(errorHandler);
 

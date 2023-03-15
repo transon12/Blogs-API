@@ -20,8 +20,9 @@ module.exports.getNewBlogs = asyncHandler(async (req, res, next) => {
           include: [{ model: User, attributes: ["username"] }],
         },
       ],
-      order: [["user_id", "DESC"]],
+      order: [["createdAt", "DESC"]],
     });
+    // const getUser = new User("1","minhkhoa")
     res.status(200).json({ msg: "Get successfully", bloglists: newBlogsList });
   } catch (err) {
     console.log(err);
@@ -78,9 +79,11 @@ module.exports.listComments = asyncHandler(async (req, res, next) => {
 });
 module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
   try {
+    const {id} = req.params;
+  
     const getIndividual = await Blogs.findAll({
       where: {
-        UserId: "39",
+        UserId: id,
       },
       include: [
         {
@@ -115,5 +118,54 @@ module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
     console.log(err);
 
     res.status(500).json({ msg: "Cannot get user list individuals" });
+  }
+});
+module.exports.getInfoUser = asyncHandler(async (req, res, next) => {
+  try {
+    const {id} = req.params;
+
+   const userInfo = await User.findByPk(id,{
+    include: [
+      // Lấy thông tin bài viết của người dùng
+      {
+        model: Blogs,
+        attributes: ['id', 'title', 'content'],
+      },
+      // Lấy thông tin comment của người dùng
+      {
+        model: Comment,
+        attributes: ['id', 'content'],
+        include: [
+          // Lấy thông tin bài viết mà người dùng đã comment
+          {
+            model: Blogs,
+            attributes: ['id', 'title'],
+            through: { attributes: [] }, // Bỏ qua các thuộc tính của bảng trung gian
+          },
+        ],
+      },
+      // Lấy thông tin like của người dùng
+      {
+        model: Likes,
+        attributes: ['id'],
+        include: [
+          // Lấy thông tin bài viết mà người dùng đã like
+          {
+            model: Blog,
+            attributes: ['id', 'title'],
+            through: { attributes: [] },
+          },
+        ],
+      },
+    ],
+   })
+    res.status(200).json({
+      msg: "Get individuals successfully",
+      infoUser: userInfo,
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({ msg: "Cannot get user list infoUser" });
   }
 });
