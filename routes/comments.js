@@ -1,23 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const comment = require("../services/comment");
 
-const {
-  getComment,
-  getComments,
-  createComment,
-  deleteComment,
-} = require("../controllers/comments");
-
-const { protect } = require("../middlewares/auth");
-
-router
-  .route("/articles/:slug/comments")
-  .get(protect, getComments)
-  .post(protect, createComment);
-
-router
-  .route("/articles/:slug/comments/:id")
-  .get(protect, getComment)
-  .delete(protect, deleteComment);
+router.post("/comment", comment.createComment);
+router.get("/comment/:blogid", comment.getComment);
+router.put("/comment/:id", comment.updateComment);
+router.delete("/comment/:id", comment.createComment);
 
 module.exports = router;
