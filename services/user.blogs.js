@@ -65,7 +65,7 @@ module.exports.listComments = asyncHandler(async (req, res, next) => {
         },
       ],
     });
-   
+
     res.status(200).json({
       msg: "Get comments successfully",
       listComment: getListComments,
@@ -76,35 +76,44 @@ module.exports.listComments = asyncHandler(async (req, res, next) => {
     res.status(500).json({ msg: "Cannot get user list comments" });
   }
 });
-module.exports.getBlogsIndividual = asyncHandler(async(req,res,next)=>{
-try{
-const getIndividual = await Blogs.findAll({
-  where:{
-    UserId: UserId,
-  },
-  include:[{
-    model: User,
-    attributes:["username"]
-  },{
-    model: Comment,
-    include:[{
-      model:User,
-      attributes:["username"]
-    }]
-  },{
-    model:Likes,
-    include:[{
-      model:User,
-      attributes:["username"]
-    }]
-  }]
-})
-res.status(200).json({
-  msg: "Get individuals successfully",
-  listIndividual: getIndividual,
+module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
+  try {
+    const getIndividual = await Blogs.findAll({
+      where: {
+        UserId: "38",
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["username"],
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["username"],
+            },
+          ],
+        },
+        {
+          model: Likes,
+          include: [
+            {
+              model: User,
+              attributes: ["username"],
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).json({
+      msg: "Get individuals successfully",
+      listIndividual: getIndividual,
+    });
+  } catch (err) {
+    console.log(err);
 
+    res.status(500).json({ msg: "Cannot get user list individuals" });
+  }
 });
-}catch(err){
-  res.status(500).json({ msg: "Cannot get user list individuals" });
-}
-})
