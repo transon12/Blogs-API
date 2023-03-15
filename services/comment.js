@@ -1,6 +1,7 @@
 const comments = require("../models/Comment");
 const users = require("../models/User");
 const { get } = require("../routes/Admin");
+const ErrorResponse = require("../util/errorResponse");
 const CommentService = require("./commentservice");
 
 module.exports.createComment = async (req, res, next) => {
@@ -39,12 +40,12 @@ module.exports.getComment = async (req, res, next) => {
 
 module.exports.updateComment = async (req, res, next) => {
   try {
-    const updateComment = await comments.findOne({
-      where: { id: req.body.id },
-    });
-    if (updateComment) {
-      updateComment.status = req.body.status;
-    }
+    const param = {
+      content: req.body.content,
+    };
+    let comment = new CommentService(param);
+    await comment.updateComment(req.params.id);
+
     res.status(200).json({
       status: 200,
       message: "successfully",
@@ -56,19 +57,12 @@ module.exports.updateComment = async (req, res, next) => {
 
 module.exports.deleteComment = async (req, res) => {
   try {
-    const deleteComment = await comments.findOne({
-      where: {
-        id: req.body.id,
-      },
-    });
-    if (deleteComment) {
-      await deleteComment.destroy();
-    }
-    res.status(200).json({
-      status: 200,
-      message: "successfully",
-    });
+    let comment = new CommentService(req.params.id);
+    let a = await comment.deleteComment(req.params.id);
+    if (!a) throw new ErrorResponse("Khong ton tai", 500);
+    return res.status(200).json("Thanh cong");
   } catch (err) {
     console.log(err);
+    return res.status(err.statusCode).json(err.message);
   }
 };
