@@ -140,7 +140,7 @@ module.exports.getInfoUser = asyncHandler(async (req, res, next) => {
           {
             model: Blogs,
             attributes: ['id', 'title'],
-            through: { attributes: [] }, // Bỏ qua các thuộc tính của bảng trung gian
+          // Bỏ qua các thuộc tính của bảng trung gian
           },
         ],
       },
@@ -151,9 +151,9 @@ module.exports.getInfoUser = asyncHandler(async (req, res, next) => {
         include: [
           // Lấy thông tin bài viết mà người dùng đã like
           {
-            model: Blog,
+            model: Blogs,
             attributes: ['id', 'title'],
-            through: { attributes: [] },
+           
           },
         ],
       },
