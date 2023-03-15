@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../util/database");
-const slugify = require("slugify");
+// const slugify = require("slugify");
 const Blogs = sequelize.define(
   "Blogs",
   {
@@ -63,10 +63,10 @@ const Blogs = sequelize.define(
       allowNull: true,
     },
   },
-  { timestamps: false }
+  { timestamps: true }
 );
-Blogs.beforeValidate((blogs) => {
-  blogs.slugs = slugify(blogs.slugs, { lower: true });
-});
+// Blogs.beforeValidate((blogs) => {
+//   blogs.slugs = slugify(blogs.slugs, { lower: true });
+// });
 
 module.exports = Blogs;

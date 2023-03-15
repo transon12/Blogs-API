@@ -1,9 +1,10 @@
 const { Sequelize } = require("sequelize");
 // const dotenv = require("dotenv").config();
 
-const sequelize = new Sequelize("csdl_blogs", "root", "12345678", {
+const sequelize = new Sequelize("csdl_blogs", "root", "123456a@", {
   dialect: "mysql",
   host: "127.0.0.1",
+  timezone: "+07:00",
 });
 
 const checkConnection = async () => {

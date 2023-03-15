@@ -6,12 +6,6 @@ const User = require("../models/User");
 const ErrorResponse = require("../util/errorResponse");
 const slugify = require("slugify");
 
-const {
-  appendFollowers,
-  appendFavorites,
-  appendTagList,
-} = require("../util/helpers");
-
 const includeOptions = [
   {
     model: Tag,
