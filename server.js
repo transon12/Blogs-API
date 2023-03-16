@@ -55,12 +55,14 @@ const users = require("./routes/users");
 const getBlogs = require("./routes/user.getblogs");
 // const articles = require("./routes/articles");
 const comments = require("./routes/comments");
+const postBlogs = require("./routes/userPost");
 // const tags = require("./routes/tags");
 
 // Mount routers
 app.use(admin);
 app.use(users);
 app.use(getBlogs);
+app.use(postBlogs);
 // app.use(profiles);
 // app.use("/", articles);
 app.use(comments);

@@ -79,8 +79,8 @@ module.exports.listComments = asyncHandler(async (req, res, next) => {
 });
 module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
   try {
-    const {id} = req.params;
-  
+    const { id } = req.params;
+
     const getIndividual = await Blogs.findAll({
       where: {
         UserId: id,
@@ -122,50 +122,75 @@ module.exports.getBlogsIndividual = asyncHandler(async (req, res, next) => {
 });
 module.exports.getInfoUser = asyncHandler(async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
-   const userInfo = await User.findByPk(id,{
-    include: [
-      // Lấy thông tin bài viết của người dùng
-      {
-        model: Blogs,
-        attributes: ['id', 'title', 'content'],
-      },
-      // Lấy thông tin comment của người dùng
-      {
-        model: Comment,
-        attributes: ['id', 'content'],
-        include: [
-          // Lấy thông tin bài viết mà người dùng đã comment
-          {
-            model: Blogs,
-            attributes: ['id', 'title'],
-          // Bỏ qua các thuộc tính của bảng trung gian
-          },
-        ],
-      },
-      // Lấy thông tin like của người dùng
-      {
-        model: Likes,
-        attributes: ['id'],
-        include: [
-          // Lấy thông tin bài viết mà người dùng đã like
-          {
-            model: Blogs,
-            attributes: ['id', 'title'],
-           
-          },
-        ],
-      },
-    ],
-   })
+    const userInfo = await User.findByPk(id, {
+      include: [
+        // Lấy thông tin bài viết của người dùng
+        {
+          model: Blogs,
+          attributes: ["id", "title", "content"],
+        },
+        // Lấy thông tin comment của người dùng
+        {
+          model: Comment,
+          attributes: ["id", "content"],
+          include: [
+            // Lấy thông tin bài viết mà người dùng đã comment
+            {
+              model: Blogs,
+              attributes: ["id", "title"],
+              // Bỏ qua các thuộc tính của bảng trung gian
+            },
+          ],
+        },
+        // Lấy thông tin like của người dùng
+        {
+          model: Likes,
+          attributes: ["id"],
+          include: [
+            // Lấy thông tin bài viết mà người dùng đã like
+            {
+              model: Blogs,
+              attributes: ["id", "title"],
+            },
+          ],
+        },
+      ],
+    });
     res.status(200).json({
-      msg: "Get individuals successfully",
+      msg: "Get userInfo successfully",
       infoUser: userInfo,
     });
   } catch (err) {
     console.log(err);
 
     res.status(500).json({ msg: "Cannot get user list infoUser" });
+  }
+});
+module.exports.getInfoUserLike = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const getInfoLikeUser = User.findAll({
+      include: [
+        {
+          model: Blogs,
+          where: { id: id },
+          required: false,
+          // through: { attributes: [] },
+        },
+        {
+          model: Comment,
+          required: false,
+          // through: { attributes: [] },
+        },
+      ],
+    });
+    res.status(200).json({
+      msg: "Get userInfoLike successfully",
+      infoUser: getInfoLikeUser,
+    });
+  } catch (err) {
+    console.log(err);
   }
 });
