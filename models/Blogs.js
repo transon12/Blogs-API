@@ -38,14 +38,14 @@ const Blogs = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    category_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
+    // category_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    // },
+    // user_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    // },
     view: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -58,10 +58,10 @@ const Blogs = sequelize.define(
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    admin_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
+    // admin_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    // },
   },
   { timestamps: true }
 );
